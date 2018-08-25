@@ -1,4 +1,3 @@
-
 var Friend = require("./friend.js");
 
 var friends = [];
@@ -17,3 +16,4 @@ newFriend = new Friend('cbo6', 'https://images.pexels.com/photos/846741/pexels-p
 friends.push(newFriend);
 
 module.exports = friends;
+

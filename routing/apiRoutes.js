@@ -43,10 +43,11 @@ router.post("/api/friends", function (req, res) {
     // req.body hosts is equal to the JSON post sent from the user
     // This works because of our body-parser middleware
     var logger = req.app.get('logger');
+
     logger.info("got the post to /api/friends with: " + req.body.name);
     logger.info("got the post to /api/friends with: " + req.body.photo);
     logger.info("got the post to /api/friends with: " + req.body.scores);
-    var friendInfo = req.body;
+    console.log(req);
 
     // intially set the bestMatch to something rediculously high so all those that follow will be better
     var bestMatch = new Friend('nodbody', 'noPhoto', [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]);
