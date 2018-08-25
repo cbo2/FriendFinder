@@ -30,14 +30,23 @@ const logger = winston.createLogger({
 var app = express();
 app.set('port', process.env.PORT || 3000);
 app.set('logger', logger);
+app.set('path', path);
 
 // Sets up the Express app to handle data parsing
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// app.use(express.static(path.join(__dirname, 'public')));  // this will allow our public folder to be equivalent to / (root)
 app.use(express.static('public'));  // this will allow our public folder to be equivalent to / (root)
 app.use(require('./routing/htmlRoutes'));
 app.use(require('./routing/apiRoutes'));
+
+// app.get("/survey", function (req, res) {
+//     // res.sendFile(path.join(__dirname, "view.html"));
+//     var logger = req.app.get('logger');
+//     logger.info("we are now in the root route!");
+//     res.sendFile('/survey.html');
+// });
 
 var server = app.listen(app.get('port'), function() {
     logger.info("Listening on port: " + app.get('port'));
