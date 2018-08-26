@@ -44,11 +44,7 @@ router.post("/api/friends", function (req, res) {
     // This works because of our body-parser middleware
     var logger = req.app.get('logger');
 
-    logger.info("got the post to /api/friends with: " + req.body.name);
-    logger.info("got the post to /api/friends with: " + req.body.photo);
-    logger.info("got the post to /api/friends with: " + req.body.scores);
-    console.log(req);
-
+    var thisNewFriend = new Friend(req.body.name, req.body.photo, req.body.scores);
     // intially set the bestMatch to something rediculously high so all those that follow will be better
     var bestMatch = new Friend('nodbody', 'noPhoto', [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]);
 
@@ -56,7 +52,7 @@ router.post("/api/friends", function (req, res) {
     var bestScore = bestMatch.scores.reduce(function (total, score) {
         return total + score;
     });
-    console.log("the initial bestScore is: " + bestScore);
+    logger.info("the initial bestScore is: " + bestScore);
 
     // iterate all friends array using the map function
     friends.map(function (friend) {
@@ -65,17 +61,16 @@ router.post("/api/friends", function (req, res) {
         // now iterate all the scores for this friend using the map function
         friend.scores.map(function (currentQuestionScore, i) {
             currentFriendTotalDiff += Math.abs(currentQuestionScore - req.body.scores[i]);
-            console.log("the index is now: " + i + " and the difference is: " + currentFriendTotalDiff);
         });
         if (currentFriendTotalDiff < bestScore) {
             bestMatch = friend;
             bestScore = currentFriendTotalDiff;
-            console.log("bestMatch is now: " + JSON.stringify(bestMatch));
+            logger.debug("bestMatch is now: " + JSON.stringify(bestMatch));
         }
     });
 
-
-    res.json(bestMatch);
+    res.json(bestMatch);   // send the match info back to the client to display in the modal
+    friends.push(thisNewFriend);   // add the new Friend that was posted in this call to the array
 });
 
 module.exports = router;
