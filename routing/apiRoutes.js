@@ -4,15 +4,15 @@ var router = express.Router();
 
 var friends = require('../app/data/friends');
 
-var Friend = require('../app/data/friend');
+// var Friend = require('../app/data/friend');
 
 // Basic route that sends the user first to the AJAX Page
 router.get("/api/friends", function (req, res) {
     // res.sendFile(path.join(__dirname, "view.html"));
     var logger = req.app.get('logger');
-    logger.info(JSON.stringify(friends));
+    logger.info(JSON.stringify(friends.friends));
     var allFriends = "";
-    friends.forEach(function (friend) {
+    friends.friends.forEach(function (friend) {
         allFriends += `
             <tr>
                 <td>${friend.name}</td>
@@ -44,9 +44,9 @@ router.post("/api/friends", function (req, res) {
     // This works because of our body-parser middleware
     var logger = req.app.get('logger');
 
-    var thisNewFriend = new Friend(req.body.name, req.body.photo, req.body.scores);
+    var thisNewFriend = new friends.constructor(req.body.name, req.body.photo, req.body.scores);
     // intially set the bestMatch to something rediculously high so all those that follow will be better
-    var bestMatch = new Friend('nodbody', 'noPhoto', [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]);
+    var bestMatch = new friends.constructor('nodbody', 'noPhoto', [20, 20, 20, 20, 20, 20, 20, 20, 20, 20]);
 
     // use the array reduce method to aggregate all 10 scores to a single number as bestScore
     var bestScore = bestMatch.scores.reduce(function (total, score) {
@@ -55,7 +55,7 @@ router.post("/api/friends", function (req, res) {
     logger.info("the initial bestScore is: " + bestScore);
 
     // iterate all friends array using the map function
-    friends.map(function (friend) {
+    friends.friends.map(function (friend) {
         var currentFriendTotalDiff = 0;
         var i = 0;
         // now iterate all the scores for this friend using the map function
@@ -70,7 +70,7 @@ router.post("/api/friends", function (req, res) {
     });
 
     res.json(bestMatch);   // send the match info back to the client to display in the modal
-    friends.push(thisNewFriend);   // add the new Friend that was posted in this call to the array
+    friends.friends.push(thisNewFriend);   // add the new Friend that was posted in this call to the array
 });
 
 module.exports = router;

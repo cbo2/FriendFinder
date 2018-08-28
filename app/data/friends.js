@@ -1,4 +1,8 @@
-var Friend = require("./friend.js");
+function Friend(name, photo, scores) {
+    this.name = name;
+    this.photo = photo;
+    this.scores = scores;
+}
 
 var friends = [];
 
@@ -15,5 +19,7 @@ friends.push(newFriend);
 newFriend = new Friend('cbo6', 'https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', [1,2,3,4,5,5,4,3,2,1]);
 friends.push(newFriend);
 
-module.exports = friends;
-
+module.exports = {
+    constructor: Friend,
+    friends: friends
+}
